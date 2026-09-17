@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+
+# Node / Angular
+node_modules/
+dist/
+.angular/
+
+# Env
+.env
+
+# OS
+.DS_Store
