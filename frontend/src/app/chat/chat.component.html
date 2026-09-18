@@ -1,0 +1,27 @@
+<div class="chat">
+  <div class="chat__messages">
+    <div *ngFor="let m of messages" class="message" [class.message--user]="m.role === 'user'">
+      <div class="message__bubble">
+        <span *ngIf="m.pending">Печатает…</span>
+        <span *ngIf="!m.pending">{{ m.content }}</span>
+
+        <div *ngIf="m.sources?.length" class="message__sources">
+          <div class="message__sources-title">Источники:</div>
+          <div *ngFor="let s of m.sources" class="source-chip" [title]="s.snippet">
+            {{ s.document_path }} ({{ s.score }})
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <form class="chat__input" (ngSubmit)="send()">
+    <input
+      [(ngModel)]="draft"
+      name="draft"
+      placeholder="Спросите что-нибудь о проекте…"
+      autocomplete="off"
+    />
+    <button type="submit" [disabled]="isSending">Отправить</button>
+  </form>
+</div>
