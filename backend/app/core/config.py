@@ -3,6 +3,7 @@
 Значения читаются из переменных окружения (см. .env в корне backend/).
 """
 from functools import lru_cache
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 

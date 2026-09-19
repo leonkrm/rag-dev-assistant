@@ -49,11 +49,12 @@ async def answer_question(db: AsyncSession, question: str) -> tuple[str, list[So
 
     if not results:
         return (
-            "В базе знаний пока нет проиндексированных данных, чтобы ответить на этот "
-            "вопрос. Сначала добавьте источник через /api/sources.",
+            (
+                "В базе знаний пока нет проиндексированных данных, чтобы ответить на этот "
+                "вопрос. Сначала добавьте источник через /api/sources."
+            ),
             [],
         )
-
     context = _build_context(results)
     llm = get_llm_client()
     prompt = _build_user_prompt(question, context)

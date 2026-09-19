@@ -1,0 +1,6 @@
+[tool.ruff]
+line-length = 100
+exclude = ["migrations/versions"]
+
+[tool.ruff.lint]
+ignore = ["B008"]  # Depends(...) в дефолтах аргументов — стандартный паттерн FastAPI
