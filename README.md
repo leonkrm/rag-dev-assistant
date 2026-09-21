@@ -1,95 +1,288 @@
-<!-- ==================================================================
-  PROFILE README for github.com/leonkrm
-  1) Repo must be PUBLIC and named exactly: leonkrm
-  2) Upload README.md AND the folder "assets" (with the banner image) to it
-  3) Make the repo "rag-dev-assistant" public (it is linked from Featured Projects)
-================================================================== -->
+# RAG Dev Assistant
 
-<p align="center">
-  <img src="assets/7957f5640d1591649ceb1e4ed25e20c9.jpg" alt="What if I can't? But what if I can?" width="100%" />
-</p>
+Это проект для создания локального AI-ассистента разработчика, который отвечает на вопросы по коду, документации и внутренним знаниям команды, опираясь на фактический контекст из индексированных источников.
 
-# Hi, I'm Leon 👋
+Смысл проекта прост: вместо того чтобы искать по репозиторию вручную, можно задать вопрос в интерфейсе вроде “Где реализован этот сценарий?”, “Как работает авторизация?”, “Какая логика у этого модуля?” — и получить ответ, основанный на реальном содержании файлов, с указанием источников.
 
-Backend developer focused on **Python, Django, .NET** and **Computer Vision**.
+## Что это за проект
 
-📍 Almaty · 🎓 KazNU
+Это минимальный, но рабочий прототип системы Retrieval-Augmented Generation (RAG) для разработки:
 
-I'm a **3rd-year student at Al-Farabi Kazakh National University** (Faculty of Information Technology and Artificial Intelligence), specializing in **high-load information systems with AI**.
-I build **backend services** with Python / Django and C# / .NET, and I explore **computer vision** and **distributed systems**.
+- собирает знания из локальных файлов проекта;
+- разбивает их на чанки;
+- превращает текст в эмбеддинги;
+- хранит их в PostgreSQL через pgvector;
+- ищет релевантные куски текста по векторному сходству;
+- передаёт найденный контекст в LLM;
+- возвращает ответ с указанием источников.
 
----
+Проект заточен под задачи, где нужно быстро задавать вопросы по внутренней кодовой базе, документации, архитектуре и практикам команды, не переписывая весь поиск и не загружая весь проект в чужую модель.
 
-## 🔭 Currently
+## Для каких задач он предназначен
 
-- Building a high-load **Ticket Booking API** (Django, PostgreSQL, Redis)
-- Building **Object Detector**
-- Exploring **Computer Vision**
-- Learning **distributed / high-load systems**
+Этот проект особенно полезен для:
 
----
+- быстрого поиска по коду внутри команды;
+- навигации по проектам, в которых много файлов и модулей;
+- помощи новичкам в изучении структуры проекта;
+- получения ответов на вопросы “где это сделано” и “как здесь устроено”;
+- работы над внутренней документацией и знаниями проекта;
+- создания AI-ассистента для разработки без привязки к одному внешнему сервису.
 
-## 🛠️ Tech Stack
+По сути, это база для внутренних “Dev Copilot”-подобных решений, но реализованная в компактной и локально запускаемой форме.
 
-<p align="center"><b>Languages</b></p>
-<p align="center">
-  <img src="https://skillicons.dev/icons?i=python,cs,js" alt="languages" /><br/>
-  <img src="https://img.shields.io/badge/F%23-378BBA?style=flat-square&logo=fsharp&logoColor=white" alt="F#" />
-  <img src="https://img.shields.io/badge/SQL-4479A1?style=flat-square" alt="SQL" />
-</p>
+## Как работает проект
 
-<p align="center"><b>Backend &amp; databases</b></p>
-<p align="center">
-  <img src="https://skillicons.dev/icons?i=django,dotnet,postgres,mongodb" alt="backend" />
-</p>
+Схема очень простая и типичная для RAG:
 
-<p align="center"><b>AI &amp; computer vision</b></p>
-<p align="center">
-  <img src="https://skillicons.dev/icons?i=pytorch,tensorflow" alt="ai" /><br/>
-  <img src="https://img.shields.io/badge/OpenCV-5C3EE8?style=flat-square&logo=opencv&logoColor=white" alt="OpenCV" />
-  <img src="https://img.shields.io/badge/YOLO-111F68?style=flat-square" alt="YOLO" />
-</p>
+1. Пользователь задаёт вопрос в веб-интерфейсе.
+2. Бэкенд превращает вопрос в эмбеддинг.
+3. Векторный поиск в PostgreSQL + pgvector находит наиболее релевантные куски текста.
+4. Из найденных чанков собирается контекст.
+5. Контекст передаётся в LLM вместе с вопросом.
+6. Модель отвечает, опираясь на найденные фрагменты, и возвращает источники.
 
-<p align="center"><b>Frontend &amp; desktop</b></p>
-<p align="center">
-  <img src="https://skillicons.dev/icons?i=angular" alt="frontend" /><br/>
-  <img src="https://img.shields.io/badge/WPF-512BD4?style=flat-square" alt="WPF" />
-</p>
+## Архитектура проекта
 
-<p align="center"><b>DevOps &amp; tools</b></p>
-<p align="center">
-  <img src="https://skillicons.dev/icons?i=docker,git,github,vscode" alt="tools" /><br/>
-  <img src="https://img.shields.io/badge/Rider-000000?style=flat-square" alt="Rider" />
-  <img src="https://img.shields.io/badge/Fedora-51A2DA?style=flat-square&logo=fedora&logoColor=white" alt="Fedora" />
-</p>
+### Backend
 
----
+Реализован на Python и FastAPI. Основные области:
 
-## 🚀 Featured Projects
+- API для чата
+- API для поиска по базе знаний
+- API для управления источниками
+- сервисы для chunking, embeddings, векторного поиска и вызова LLM
+- модели данных для Source, Document и Chunk
 
-### 🤖 RAG Dev Assistant
-Python · RAG-based assistant for developers
-[Repository →](https://github.com/leonkrm/rag-dev-assistant)
+### Frontend
 
-### 🎟️ Ticket Booking API &nbsp; `🚧 In progress`
-Django REST + PostgreSQL + Redis + Celery + Docker · race-safe seat booking under load
-<!-- When the repo exists, add: [Repository →](https://github.com/leonkrm/ticket-booking-api) -->
+Реализован на Angular. UI представляет собой простой чат, в котором:
 
-### 🔍 Object Detector &nbsp; `🚧 In progress`
-YOLO + OpenCV · repository coming soon
+- пользователь вводит вопрос;
+- отображается поток ответа;
+- рядом показываются источники с подсказками по файлам и релевантности.
 
-<!-- Template for the next project:
-### ⚙️ Project name
-Stack: Django + PostgreSQL + Docker
-[Repository →](https://github.com/leonkrm/repo-name)
--->
+### База данных
 
----
+Используется PostgreSQL с расширением pgvector:
+
+- источники знаний;
+- документы внутри источников;
+- чанки текста;
+- эмбеддинги для каждого чанка.
+
+### LLM и эмбеддинги
+
+По умолчанию используется модель sentence-transformers/all-MiniLM-L6-v2 для embeddings и Anthropic API для генерации текста. Поддерживается настройка другого провайдера через переменные окружения.
+
+## Основные функции
+
+На текущий момент проект уже умеет:
+
+- индексировать локальные папки с файлами расширений .py, .ts, .md, .yml, .yaml, .txt, .json;
+- разбивать документы на чанки с перекрытием;
+- вычислять эмбеддинги для каждого чанка;
+- искать похожие чанки по косинусной близости;
+- отвечать на вопросы через LLM на основе найденного контекста;
+- хранить историю сообщений в БД;
+- показывать список источников в интерфейсе.
+
+## Что сейчас ограничено
+
+Это ещё не “полноценный enterprise-проект”, а рабочий прототип с рядом важных ограничений:
+
+- пока индексируются только локальные папки, не git-репозитории;
+- нет полноценной авторизации и ролей;
+- нет сложных пайплайнов повторной индексации/синхронизации;
+- нет гибридного поиска (BM25 + векторный поиск);
+- нет продвинутой обработки больших файлов/многочисленных источников.
+
+Но для демонстрации идеи и локальной разработки этого достаточно.
+
+## Стек технологий
+
+| Компонент | Технологии |
+| --- | --- |
+| Бэкенд | Python, FastAPI, SQLAlchemy 2, Alembic |
+| Фронтенд | Angular, TypeScript |
+| БД | PostgreSQL 16 + pgvector |
+| Эмбеддинги | sentence-transformers |
+| LLM | Anthropic API / OpenAI-совместимый API |
+| Инфраструктура | Docker, Docker Compose |
+| Проверки | pytest, Ruff |
+
+## Структура репозитория
+
+- backend — FastAPI-приложение, модели, сервисы, миграции и тесты
+- frontend — Angular-приложение с простым чат-интерфейсом
+- infra — инициирующие SQL-скрипты и инфраструктурные настройки
+- docker-compose.yml — запуск всего проекта локально
+
+## Быстрый старт
+
+### 1. Подготовка окружения
+
+Скопируйте пример файла переменных окружения:
+
+```bash
+cp backend/.env.example backend/.env
+```
+
+Далее заполните минимум:
+
+- DATABASE_URL
+- LLM_API_KEY
+- при необходимости LLM_PROVIDER / LLM_MODEL
+
+### 2. Запуск через Docker Compose
+
+```bash
+docker compose up --build
+```
+
+После запуска будут доступны:
+
+- Backend: http://localhost:8000
+- Swagger: http://localhost:8000/docs
+- Frontend: http://localhost:4200
+- PostgreSQL: localhost:5432
+
+### 3. Применение миграций
+
+```bash
+docker exec -it <backend_container_name> alembic upgrade head
+```
+
+### 4. Индексация источника
+
+Через API создаётся источник и запускается синхронизация:
+
+```bash
+curl -X POST http://localhost:8000/api/sources \
+  -H "Content-Type: application/json" \
+  -d '{"name":"my-project","type":"local_folder","uri":"/path/to/project"}'
+```
+
+```bash
+curl -X POST http://localhost:8000/api/sources/<SOURCE_ID>/sync
+```
+
+После этого можно задавать вопросы через UI или через API /api/chat.
+
+## API в двух словах
+
+### Chat
+
+- POST /api/chat
+- принимает вопрос и опционально conversation_id
+- возвращает ответ модели и список источников
+
+### Search
+
+- GET /api/search?q=...
+- возвращает релевантные чанки без генерации текста
+
+### Sources
+
+- GET /api/sources — список всех источников
+- POST /api/sources — добавление источника
+- POST /api/sources/{id}/sync — запуск индексации
+
+## Пример сценария использования
+
+Типичный сценарий:
+
+- пользователь добавляет папку с проектом или документацией;
+- система индексирует файлы;
+- разработчик спрашивает: “Как в этом проекте работают роутеры?”;
+- система находит релевантные документы;
+- LLM формирует краткий и точный ответ;
+- UI показывает, где именно эта информация взята.
+
+## Цель проекта
+
+Главная идея проекта — сделать локальный, управляемый и прозрачный AI-ассистент для разработчиков, который работает поверх реальных знаний команды, а не поверх общих интернет-данных.
+
+Это хороший фундамент для:
+
+- внутреннего корпоративного search assistant;
+- Q&A по проектам и кодовой базе;
+- поддержки разработки и onboarding;
+- автоматизации работы с внутренней документацией.
+
+## Roadmap
+
+Планы по развитию проекта:
+
+- индексация git-репозиториев;
+- синхронизация изменений при обновлении знаний;
+- улучшение качества поиска и ранжирования;
+- поддержка дополнительных источников: Notion, Confluence, wiki;
+- аутентификация и разграничение доступа;
+- продвинутая фильтрация и кеширование;
+- деплой в облако и контейнеризация для production.
+
+## Лицензия
+
+Проект распространяется под лицензией MIT.
+
+### Chat
+
+- POST /api/chat
+- принимает вопрос и опционально conversation_id
+- возвращает ответ модели и список источников
+
+### Search
+
+- GET /api/search?q=...
+- возвращает релевантные чанки без генерации текста
+
+### Sources
+
+- GET /api/sources — список всех источников
+- POST /api/sources — добавление источника
+- POST /api/sources/{id}/sync — запуск индексации
+
+## Пример сценария использования
+
+Типичный сценарий:
+
+- пользователь добавляет папку с проектом или документацией;
+- система индексирует файлы;
+- разработчик спрашивает: “Как в этом проекте работают роутеры?”;
+- система находит релевантные документы;
+- LLM формирует краткий и точный ответ;
+- UI показывает, где именно эта информация взята.
+
+## Цель проекта
+
+Главная идея проекта — сделать локальный, управляемый и прозрачный AI-ассистент для разработчиков, который работает поверх реальных знаний команды, а не поверх общих интернет-данных.
+
+Это хороший фундамент для:
+
+- внутреннего корпоративного search assistant;
+- Q&A по проектам и кодовой базе;
+- поддержки разработки и onboarding;
+- автоматизации работы с внутренней документацией.
+>>>>>>> ce0cbc8 (Initial project setup with RAG assistant)
 
 ## 🤝 Let's connect
 
+<<<<<<< HEAD
 <p align="center">
   <a href="https://www.linkedin.com/in/ruslan-kerimbekov/"><img src="https://img.shields.io/badge/LINKEDIN-0A66C2?style=for-the-badge" alt="LinkedIn" /></a>
   <a href="https://t.me/insomeli"><img src="https://img.shields.io/badge/TELEGRAM-26A5E4?style=for-the-badge" alt="Telegram" /></a>
   <a href="mailto:leonx.kerimbekov@gmail.com"><img src="https://img.shields.io/badge/EMAIL-D14836?style=for-the-badge" alt="Email" /></a>
 </p>
+=======
+Планы по развитию проекта:
+
+- индексация git-репозиториев;
+- синхронизация изменений при обновлении знаний;
+- улучшение качества поиска и ранжирования;
+- поддержка дополнительных источников: Notion, Confluence, wiki;
+- аутентификация и разграничение доступа;
+- продвинутая фильтрация и кеширование;
+- деплой в облако и контейнеризация для production.
+
+>>>>>>> ce0cbc8 (Initial project setup with RAG assistant)
