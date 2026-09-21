@@ -266,23 +266,3 @@ curl -X POST http://localhost:8000/api/sources/<SOURCE_ID>/sync
 - автоматизации работы с внутренней документацией.
 >>>>>>> ce0cbc8 (Initial project setup with RAG assistant)
 
-## 🤝 Let's connect
-
-<<<<<<< HEAD
-<p align="center">
-  <a href="https://www.linkedin.com/in/ruslan-kerimbekov/"><img src="https://img.shields.io/badge/LINKEDIN-0A66C2?style=for-the-badge" alt="LinkedIn" /></a>
-  <a href="https://t.me/insomeli"><img src="https://img.shields.io/badge/TELEGRAM-26A5E4?style=for-the-badge" alt="Telegram" /></a>
-  <a href="mailto:leonx.kerimbekov@gmail.com"><img src="https://img.shields.io/badge/EMAIL-D14836?style=for-the-badge" alt="Email" /></a>
-</p>
-=======
-Планы по развитию проекта:
-
-- индексация git-репозиториев;
-- синхронизация изменений при обновлении знаний;
-- улучшение качества поиска и ранжирования;
-- поддержка дополнительных источников: Notion, Confluence, wiki;
-- аутентификация и разграничение доступа;
-- продвинутая фильтрация и кеширование;
-- деплой в облако и контейнеризация для production.
-
->>>>>>> ce0cbc8 (Initial project setup with RAG assistant)
